@@ -1,0 +1,65 @@
+def localProperties = new Properties()
+def localPropertiesFile = rootProject.file('local.properties')
+if (localPropertiesFile.exists()) {
+    localPropertiesFile.withReader('UTF-8') { reader ->
+        localProperties.load(reader)
+    }
+}
+
+def flutterSdkPath = localProperties.getProperty('flutter.sdk')
+if (flutterSdkPath == null) {
+    throw new GradleException("flutter.sdk not set in local.properties")
+}
+
+def flutterVersionCode = localProperties.getProperty('flutter.versionCode')
+if (flutterVersionCode == null) {
+    flutterVersionCode = '1'
+}
+
+def flutterVersionName = localProperties.getProperty('flutter.versionName')
+if (flutterVersionName == null) {
+    flutterVersionName = '1.0'
+}
+
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply from: "$flutterSdkPath/packages/flutter_tools/gradle/flutter.gradle"
+
+android {
+    namespace "com.example.pdf_scanner_plus"
+    compileSdkVersion 34
+    ndkVersion flutter.ndkVersion
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    kotlinOptions {
+        jvmTarget = '17'
+    }
+
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin'
+    }
+
+    defaultConfig {
+        applicationId "com.example.pdf_scanner_plus"
+        minSdkVersion 21
+        targetSdkVersion 34
+        versionCode flutterVersionCode.toInteger()
+        versionName flutterVersionName
+    }
+
+    buildTypes {
+        release {
+            signingConfig signingConfigs.debug
+            minifyEnabled false
+            shrinkResources false
+        }
+    }
+}
+
+flutter {
+    source '../..'
+}
