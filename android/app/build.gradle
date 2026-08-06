@@ -46,7 +46,7 @@ android {
     defaultConfig {
         applicationId "com.example.pdf_scanner_plus"
         minSdkVersion 21
-        targetSdkVersion 34
+        targetSdkVersion 35
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }
